@@ -7,6 +7,62 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  //basic setting
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.strokeStyle = 'lightblue'; //color
+  ctx.linejoin = 'round'; //line link when turn the corner
+  ctx.lineCap = 'round'; //the style when line end
+  ctx.lineWidth = 100;
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  let direction = true;
+
+  function draw(e){
+    if (!isDrawing) return; 
+    console.log(e)
+    //color change by HSL
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    //start drawing path and set begining coordinate
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    //join the line from begin coordinate to new position
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    //when stop drawing, that ending point become starting point
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    //changing the color 
+    hue++;
+    if (hue >= 360){
+      hue = 0
+    }
+
+    //changing the line color by direction
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1){
+      direction = !direction; //opposite the direction
+    }
+    if (direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
+
+    
+  }
+  //change starting point when mouse move
+  canvas.addEventListener('mousedown', (e) =>{
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  //when mouse move determine draw or not draw(depend on mouse down or up)
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', () => isDrawing = false); 
+  canvas.addEventListener('mouseout', () => isDrawing = false); 
 </script>
 
 <style>

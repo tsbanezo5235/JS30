@@ -10,9 +10,34 @@
   </div>
 
 <script>
+  // 將全域環境中的SpeechRecognition指好(依據不同瀏覽器)
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  const recognition = new SpeechRecognition();
+  // 讓語音識別回傳識別後的資訊（預設為false)
+  recognition.interimResults = true;
 
+  let p = document.createElement('p');
+  const words = document.querySelector('.words');
+  words.appendChild(p);
+
+  recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('');
+
+    p.textContent = transcript;
+
+    if(e.results[0].isFinal){
+      p = document.createElement('p');
+      words.appendChild(p);
+    }
+  })
+
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
 </script>
 
 

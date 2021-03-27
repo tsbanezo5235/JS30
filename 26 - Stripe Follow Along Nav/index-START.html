@@ -17,7 +17,7 @@
         <div class="dropdown dropdown1">
           <div class="bio">
             <img src="https://logo.clearbit.com/wesbos.com">
-            <p>Wes Bos sure does love web development. He teaches things like JavaScript, CSS and BBQ. Wait. BBQ isn't part of web development. It should be though!</p>
+            <p>我是個和善肥宅，今天午餐吃水煮蛋、菠菜餅、雞翅洋蔥和一根香蕉</p>
           </div>
         </div>
       </li>
@@ -66,7 +66,7 @@
         <a href="#">Other Links</a>
         <ul class="dropdown dropdown3">
           <li><a class="button" href="http://twitter.com/wesbos">Twitter</a></li>
-          <li><a class="button" href="http://facebook.com/wesbos.developer">Facebook</a></li>
+          <li><a class="button" href="https://www.facebook.com/?ref=home">Facebook</a></li>
           <li><a class="button" href="http://wesbos.com">Blog</a></li>
           <li><a class="button" href="http://wesbos.com/courses">Course Catalog</a></li>
         </ul>
@@ -140,6 +140,14 @@
     transform: translateY(100px);
     will-change: opacity;
     display: none;
+  }
+
+  .trigger-enter .dropdown{
+    display: block;
+  }
+
+  .trigger-enter-active .dropdown{
+    opacity: 1;
   }
 
   .trigger-enter .dropdown {
@@ -220,6 +228,42 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+  function handleEnter() {
+    this.classList.add('trigger-enter');
+    setTimeout(() => {
+      if (this.classList.contains('trigger-enter')) {
+        this.classList.add('trigger-enter-active')
+      }
+    }, 150);
+    background.classList.add('open');
+
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoords = dropdown.getBoundingClientRect();
+    const navCoords = nav.getBoundingClientRect();
+
+    const coords = {
+      width: dropdownCoords.width,
+      height: dropdownCoords.height,
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left - navCoords.left,
+    };
+
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+  function handleLeave() {
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
+  }
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
 </script>
 
 </body>

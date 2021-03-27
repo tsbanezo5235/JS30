@@ -43,8 +43,8 @@
   slider.addEventListener('mousedown', (e) => {
     isDown = true;
     slider.classList.add('active');
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
+    startX = e.pageX - slider.offsetLeft; //一開始點下去的x位置 - 整串圖片的最左側
+    scrollLeft = slider.scrollLeft; //一開始點下去的位置
   });
   slider.addEventListener('mouseleave', () => {
     isDown = false;
@@ -58,8 +58,8 @@
     if (!isDown) return;
     e.preventDefault();
     const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 3;//startX不變化，x隨著滑鼠移動變化
-    slider.scrollLeft = scrollLeft - walk;
+    const walk = (x - startX) * 3; //startX不變化，x隨著滑鼠移動變化
+    slider.scrollLeft = scrollLeft - walk; //點下去+移動後的位置>>>實際上slider的卷軸改變方向
   });
 </script>
 
